@@ -79,10 +79,10 @@ cd flutter_bloc_team_members
 
 ### Make scripts executable
 
-Before running the shell scripts for the first time, grant them execution permissions:
+Before running any shell script for the first time, grant them execution permissions:
 
 ```bash
-chmod +x install.sh run.sh
+chmod +x install.sh run.sh run_unit_tests.sh run_widget_tests.sh
 ```
 
 ### Install dependencies
@@ -108,4 +108,33 @@ This will automatically detect the first available device or simulator and launc
 ```bash
 flutter devices          # list available devices
 flutter run -d <device>  # run on a specific device
+```
+
+## Testing
+
+The project includes two levels of automated testing.
+
+### Unit tests
+
+Located in `test/unit_testing/`. They test the `TeamMembersBloc` in isolation using `bloc_test` and `mocktail` to mock the `GetTeamMembers` use case. The covered scenarios are:
+
+- `TeamMembersLoadRequested` — emits `Loading → Loaded`, `Loading → Empty`, and `Loading → Error` depending on the use case result
+- `TeamMemberRemoveRequested` — filters the member from the list, emits `Empty` when the last one is removed, and ignores the event when the state is not `Loaded`
+
+```bash
+./run_unit_tests.sh
+```
+
+### Widget tests
+
+Located in `test/widget_testing/`. They test each widget and page in isolation using a `MockTeamMembersBloc` and a set of shared helpers:
+
+- `pump_app.dart` — wraps a widget in `MaterialApp` with the app theme and an optional `BlocProvider`
+- `mock_bloc.dart` — provides the `MockTeamMembersBloc` used across all widget tests
+- `team_member_factory.dart` — predefined `TeamMember` fixtures for consistent test data
+
+Covered widgets and pages: `SplashPage`, `TeamMembersPage`, `EmptyMembersWidget`, `MemberCountBadge`, `MemberCountHeader`, `MembersErrorConsumer`, `RemovalListener`, and `TeamMemberItem`.
+
+```bash
+./run_widget_tests.sh
 ```
