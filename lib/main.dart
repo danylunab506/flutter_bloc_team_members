@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Team Members',
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       routerConfig: getIt<AppRouter>().router,
     );
