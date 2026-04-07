@@ -2,6 +2,16 @@
 
 A Flutter application that displays a list of team members loaded from a local JSON asset. Users can remove members from the list with a confirmation dialog. The app demonstrates a clean, scalable architecture using the BLoC pattern.
 
+## Screenshots
+
+| Splash | Loading | Members List |
+|---|---|---|
+| ![Splash](docs/screenshots/splash_screen.png) | ![Loading](docs/screenshots/loading.png) | ![Members List](docs/screenshots/members_list.png) |
+
+| Empty State | Remove Confirmation |
+|---|---|
+| ![Empty State](docs/screenshots/empty_state.png) | ![Remove Confirmation](docs/screenshots/remove_confirmation_alert.png) |
+
 ## Features
 
 - Team member list with avatar, name, title, and bio
