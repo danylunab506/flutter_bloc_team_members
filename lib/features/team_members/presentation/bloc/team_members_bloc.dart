@@ -1,14 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/get_team_members.dart';
+import '../../domain/usecases/remove_team_member.dart';
 import 'team_members_event.dart';
 import 'team_members_state.dart';
 
 class TeamMembersBloc extends Bloc<TeamMembersEvent, TeamMembersState> {
   final GetTeamMembers getTeamMembers;
+  final RemoveTeamMember removeTeamMember;
 
-  TeamMembersBloc({required this.getTeamMembers})
-      : super(const TeamMembersInitial()) {
+  TeamMembersBloc({
+    required this.getTeamMembers,
+    required this.removeTeamMember,
+  }) : super(const TeamMembersInitial()) {
     on<TeamMembersLoadRequested>(_onLoadRequested);
     on<TeamMemberRemoveRequested>(_onRemoveRequested);
   }
@@ -30,18 +34,21 @@ class TeamMembersBloc extends Bloc<TeamMembersEvent, TeamMembersState> {
     }
   }
 
-  void _onRemoveRequested(
+  Future<void> _onRemoveRequested(
     TeamMemberRemoveRequested event,
     Emitter<TeamMembersState> emit,
-  ) {
+  ) async {
     if (state is! TeamMembersLoaded) return;
 
-    final current = (state as TeamMembersLoaded).members;
-    final updated = current.where((m) => m.id != event.memberId).toList();
-    if (updated.isEmpty) {
-      emit(const TeamMembersEmpty());
-    } else {
-      emit(TeamMembersLoaded(updated));
+    try {
+      final updated = await removeTeamMember(event.memberId);
+      if (updated.isEmpty) {
+        emit(const TeamMembersEmpty());
+      } else {
+        emit(TeamMembersLoaded(updated));
+      }
+    } catch (e) {
+      emit(TeamMembersError(e.toString()));
     }
   }
 }

@@ -5,8 +5,20 @@ import '../../domain/repositories/team_member_repository.dart';
 class TeamMemberRepositoryImpl implements TeamMemberRepository {
   final TeamMemberLocalDatasource datasource;
 
-  const TeamMemberRepositoryImpl(this.datasource);
+  // In-memory cache so removals persist across calls without reloading the JSON
+  List<TeamMember>? _cache;
+
+  TeamMemberRepositoryImpl(this.datasource);
 
   @override
-  Future<List<TeamMember>> getTeamMembers() => datasource.getTeamMembers();
+  Future<List<TeamMember>> getTeamMembers() async {
+    _cache = await datasource.getTeamMembers();
+    return _cache!;
+  }
+
+  @override
+  Future<List<TeamMember>> removeTeamMember(String id) async {
+    _cache = (_cache ?? []).where((m) => m.id != id).toList();
+    return _cache!;
+  }
 }
