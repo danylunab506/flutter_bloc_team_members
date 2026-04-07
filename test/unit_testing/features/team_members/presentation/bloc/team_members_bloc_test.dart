@@ -4,11 +4,14 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:flutter_bloc_team_members/features/team_members/domain/entities/team_member.dart';
 import 'package:flutter_bloc_team_members/features/team_members/domain/usecases/get_team_members.dart';
+import 'package:flutter_bloc_team_members/features/team_members/domain/usecases/remove_team_member.dart';
 import 'package:flutter_bloc_team_members/features/team_members/presentation/bloc/team_members_bloc.dart';
 import 'package:flutter_bloc_team_members/features/team_members/presentation/bloc/team_members_event.dart';
 import 'package:flutter_bloc_team_members/features/team_members/presentation/bloc/team_members_state.dart';
 
 class MockGetTeamMembers extends Mock implements GetTeamMembers {}
+
+class MockRemoveTeamMember extends Mock implements RemoveTeamMember {}
 
 const _memberA = TeamMember(
   id: '1',
@@ -30,13 +33,17 @@ const _memberB = TeamMember(
 
 void main() {
   late MockGetTeamMembers mockGetTeamMembers;
+  late MockRemoveTeamMember mockRemoveTeamMember;
 
   setUp(() {
     mockGetTeamMembers = MockGetTeamMembers();
+    mockRemoveTeamMember = MockRemoveTeamMember();
   });
 
-  TeamMembersBloc buildBloc() =>
-      TeamMembersBloc(getTeamMembers: mockGetTeamMembers);
+  TeamMembersBloc buildBloc() => TeamMembersBloc(
+        getTeamMembers: mockGetTeamMembers,
+        removeTeamMember: mockRemoveTeamMember,
+      );
 
   group('TeamMembersLoadRequested', () {
     blocTest<TeamMembersBloc, TeamMembersState>(
@@ -85,8 +92,7 @@ void main() {
       'error message reflects the thrown exception',
       build: buildBloc,
       setUp: () {
-        when(() => mockGetTeamMembers())
-            .thenThrow(Exception('Network error'));
+        when(() => mockGetTeamMembers()).thenThrow(Exception('Network error'));
       },
       act: (bloc) => bloc.add(const TeamMembersLoadRequested()),
       expect: () => [
@@ -104,16 +110,24 @@ void main() {
     blocTest<TeamMembersBloc, TeamMembersState>(
       'emits [Loaded] without the removed member',
       build: buildBloc,
+      setUp: () {
+        when(() => mockRemoveTeamMember('1'))
+            .thenAnswer((_) async => [_memberB]);
+      },
       seed: () => const TeamMembersLoaded([_memberA, _memberB]),
       act: (bloc) => bloc.add(const TeamMemberRemoveRequested('1')),
       expect: () => [
         const TeamMembersLoaded([_memberB]),
       ],
+      verify: (_) => verify(() => mockRemoveTeamMember('1')).called(1),
     );
 
     blocTest<TeamMembersBloc, TeamMembersState>(
       'emits [Empty] when the last member is removed',
       build: buildBloc,
+      setUp: () {
+        when(() => mockRemoveTeamMember('1')).thenAnswer((_) async => []);
+      },
       seed: () => const TeamMembersLoaded([_memberA]),
       act: (bloc) => bloc.add(const TeamMemberRemoveRequested('1')),
       expect: () => [
@@ -132,10 +146,13 @@ void main() {
     blocTest<TeamMembersBloc, TeamMembersState>(
       'emits nothing when the id does not exist in the list',
       build: buildBloc,
+      setUp: () {
+        // Repository returns the same list — Equatable discards the identical state
+        when(() => mockRemoveTeamMember('unknown-id'))
+            .thenAnswer((_) async => [_memberA, _memberB]);
+      },
       seed: () => const TeamMembersLoaded([_memberA, _memberB]),
-      act: (bloc) =>
-          bloc.add(const TeamMemberRemoveRequested('id-inexistente')),
-      // BLoC discards the emission because the resulting state is identical to the current one (Equatable)
+      act: (bloc) => bloc.add(const TeamMemberRemoveRequested('unknown-id')),
       expect: () => [],
     );
   });
