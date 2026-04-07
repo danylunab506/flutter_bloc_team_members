@@ -42,6 +42,17 @@ lib/
 └── main.dart               # Entry point
 ```
 
+## BLoC Widgets Usage
+
+Each BLoC widget is used intentionally based on what the UI needs:
+
+| Widget | Where | Why |
+|---|---|---|
+| `BlocBuilder` | `MemberCountHeader` | Rebuilds the header text when the member count changes |
+| `BlocSelector` | `MemberCountBadge` | Extracts only the count from the state to avoid unnecessary rebuilds |
+| `BlocListener` | `RemovalListener` | Shows a confirmation snackbar on member removal without rebuilding the UI |
+| `BlocConsumer` | `MembersErrorConsumer` | Handles error state by showing a snackbar and replacing the UI with an error view |
+
 ## Tech Stack
 
 | Package | Purpose |
