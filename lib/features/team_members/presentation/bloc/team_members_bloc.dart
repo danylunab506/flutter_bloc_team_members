@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/get_team_members.dart';
-import '../bloc/team_members_event.dart';
-import '../bloc/team_members_state.dart';
+import 'team_members_event.dart';
+import 'team_members_state.dart';
 
 class TeamMembersBloc extends Bloc<TeamMembersEvent, TeamMembersState> {
   final GetTeamMembers getTeamMembers;
