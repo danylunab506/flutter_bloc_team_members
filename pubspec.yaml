@@ -1,4 +1,4 @@
-name: flutterbloc_team_members
+name: flutter_bloc_team_members
 description: "A Flutter project to manage team members."
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -48,4 +48,5 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/
+    - assets/team.json
+    - assets/animations/
