@@ -1,3 +1,12 @@
+// BlocBuilder<Bloc, State>
+//
+// Rebuilds the widget every time the BLoC emits a new state.
+// Accepts an optional `buildWhen` callback to control when rebuilds happen:
+// if it returns false, the builder is skipped and the previous widget is kept.
+//
+// Use it when: the widget needs to reflect state visually and you may want
+// to filter which state changes trigger a rebuild.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

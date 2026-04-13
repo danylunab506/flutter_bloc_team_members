@@ -1,3 +1,13 @@
+// BlocConsumer<Bloc, State>
+//
+// Combines BlocBuilder and BlocListener in a single widget.
+// The `listener` handles side effects and the `builder` rebuilds the UI,
+// both in response to the same state change.
+// Accepts `listenWhen` and `buildWhen` to control each independently.
+//
+// Use it when: a state change requires both a side effect AND a UI rebuild.
+// If you only need one of the two, prefer BlocListener or BlocBuilder instead.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

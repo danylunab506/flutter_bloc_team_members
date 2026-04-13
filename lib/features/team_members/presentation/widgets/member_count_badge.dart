@@ -1,3 +1,12 @@
+// BlocSelector<Bloc, State, SelectedValue>
+//
+// A specialized BlocBuilder that extracts a single value from the state
+// using a `selector` function. The widget only rebuilds when that extracted
+// value changes, regardless of how often the BLoC emits.
+//
+// Use it when: you only care about one piece of the state and want to avoid
+// rebuilds caused by unrelated state changes.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
