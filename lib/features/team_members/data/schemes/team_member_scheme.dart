@@ -1,7 +1,7 @@
 import '../../domain/entities/team_member.dart';
 
-class TeamMemberModel extends TeamMember {
-  const TeamMemberModel({
+class TeamMemberScheme extends TeamMember {
+  const TeamMemberScheme({
     required super.id,
     required super.firstName,
     required super.lastName,
@@ -10,11 +10,11 @@ class TeamMemberModel extends TeamMember {
     required super.bio,
   });
 
-  factory TeamMemberModel.fromJson(Map<String, dynamic> json) {
-    return TeamMemberModel(
+  factory TeamMemberScheme.fromJson(Map<String, dynamic> json) {
+    return TeamMemberScheme(
       id: json['id'] as String,
-      firstName: json['firstName'] as String,
-      lastName: json['lastName'] as String,
+      firstName: json['first_name'] as String,
+      lastName: json['last_name'] as String,
       title: json['title'] as String,
       avatar: json['avatar'] as String,
       bio: json['bio'] as String,
