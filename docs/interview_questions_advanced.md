@@ -70,9 +70,9 @@
 
 ---
 
-**11. Cuál es la diferencia entre una entidad y un modelo?**
+**11. Cuál es la diferencia entre una entidad y un modelo (scheme) ?**
 
-> La entidad es el objeto de negocio puro — define qué es un `TeamMember` desde la perspectiva del dominio. No sabe nada de JSON ni de APIs. El modelo es la representación de datos de una fuente concreta — sabe hacer `fromJson`, puede tener campos extras que la API devuelve pero el dominio no necesita, o nombres de campos diferentes. El modelo vive en la capa `data` y se convierte a entidad antes de salir del repositorio. En este proyecto el modelo hereda de la entidad porque la fuente es local y no hay divergencia.
+> La entidad es el objeto de negocio puro — define qué es un `TeamMember` desde la perspectiva del dominio. No sabe nada de JSON ni de APIs. El scheme (en otros proyectos se lo llama "modelo" o "DTO") es la representación de datos de una fuente concreta — sabe hacer `fromJson`, puede tener campos extras que la API devuelve pero el dominio no necesita, o nombres de campos diferentes. Vive en la capa `data` (en este proyecto, en `data/schemes/`) y se convierte a entidad antes de salir del repositorio. En este proyecto el `TeamMemberScheme` hereda de `TeamMember` porque la fuente es local y no hay divergencia; si apareciera una API remota con otra forma, introduciría un mapper en el repositorio y el scheme dejaría de heredar de la entidad.
 
 ---
 

@@ -16,9 +16,9 @@
 
 ---
 
-**3. Por qué `TeamMemberModel extends TeamMember` en lugar de mapear?**
+**3. Por qué `TeamMemberScheme extends TeamMember` en lugar de mapear?**
 
-> Es una simplificación válida para este contexto. Como el datasource es local y no hay divergencia entre lo que devuelve el JSON y lo que necesita el dominio, el modelo puede heredar directamente de la entidad. Si el día de mañana la API remota devolviera campos con nombres distintos o estructura diferente, separaría el modelo de la entidad e introduciría un mapper.
+> Es una simplificación válida para este contexto. Como el datasource es local y no hay divergencia entre lo que devuelve el JSON y lo que necesita el dominio, el scheme puede heredar directamente de la entidad. Si el día de mañana la API remota devolviera campos con nombres distintos o estructura diferente, separaría el scheme de la entidad e introduciría un mapper. El scheme vive en `data/schemes/` (no `data/models/`) porque su única responsabilidad es mapear la forma cruda de la fuente — JSON local o API — a un objeto que la capa de datos pueda usar.
 
 ---
 
